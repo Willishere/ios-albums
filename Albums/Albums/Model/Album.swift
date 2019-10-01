@@ -7,19 +7,21 @@
 //
 
 import Foundation
+import CoreData
 
 struct Album: Codable {
     let name: String
     let artist: String
     let genres: [String]
     let coverArt: [URL]
+    let songs: [Song]
     
     enum AlbumKeys: String, CodingKey {
         case name
         case artist
         case genres
         case coverArt
-        
+        case songs
     }
     
     init (from decoder: Decoder) throws {
@@ -54,5 +56,18 @@ struct Album: Codable {
         }
         
         coverArt = coverArtNames
+        
+        var songContainer = try container.nestedUnkeyedContainer(forKey: .songs)
+        var songNames: [Song] = []
+        while !songContainer.isAtEnd {
+            let songContentContainer = try songContainer.nestedContainer(keyedBy: AlbumKeys.self)
+            var songNameContainer = try songContentContainer.nestedUnkeyedContainer(forKey: .songs)
+            let songName = try songNameContainer.decode(Song.self)
+            songNames.append(songName)
+            
+            
+        }
+        
+        
     }
 }
