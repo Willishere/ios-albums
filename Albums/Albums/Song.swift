@@ -10,14 +10,20 @@ import Foundation
 
 struct Song {
     let name: String
+    let duration: String
+    let id: UUID
     
     enum SongKey: String, CodingKey{
         case name
+        case duration
+        case id
         
         enum TitleKey: String, CodingKey{
             case title
+        }
         
-        
-}
-}
+        enum DurationKey: String, CodingKey {
+            case duration
+        }
+    }
 }

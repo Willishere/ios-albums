@@ -25,14 +25,34 @@ struct Album: Codable {
     init (from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: AlbumKeys.self)
         
-        name = try container.decode(String.self, forKey: .name) ?? "Default Name"
+        name = try container.decode(String.self, forKey: .name) 
         
         let artistString = try container.decode(String.self, forKey: .artist)
-        artist = String(artistString) ?? "Default Artist"
-        
-    
-        let genresContainer 
+        artist = String(artistString)
         
         
+        var genresContainer = try container.nestedUnkeyedContainer(forKey: .genres)
+        var genreNames: [String] = []
+        while !genresContainer.isAtEnd {
+            let genresContentContainer = try genresContainer.nestedContainer(keyedBy: AlbumKeys.self)
+            
+            var genreNameContainer = try genresContentContainer.nestedUnkeyedContainer(forKey: .genres)
+            let genreName = try genreNameContainer.decode(String.self)
+            genreNames.append(genreName)
+        }
+        
+        genres = genreNames
+        
+        var coverArtContainer = try container.nestedUnkeyedContainer(forKey: .coverArt)
+        var coverArtNames: [URL] = []
+        while !coverArtContainer.isAtEnd {
+            let coverArtContentContainer = try coverArtContainer.nestedContainer(keyedBy: AlbumKeys.self)
+            
+            var coverArtNameContainer = try coverArtContentContainer.nestedUnkeyedContainer(forKey: .coverArt)
+            let coverArtName = try coverArtNameContainer.decode(URL.self)
+            coverArtNames.append(coverArtName)
+        }
+        
+        coverArt = coverArtNames
     }
 }
