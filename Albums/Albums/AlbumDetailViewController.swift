@@ -9,7 +9,13 @@
 import UIKit
 
 class AlbumDetailViewController: UIViewController {
-
+    @IBOutlet weak var albumName: UITextField!
+    
+    @IBOutlet weak var artist: UITextField!
+    @IBOutlet weak var genresSeparated: UITextField!
+    @IBOutlet weak var URL: UITextField!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
